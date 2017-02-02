@@ -1,0 +1,41 @@
+{ "stations":
+  [
+    {
+    "id": "1",
+    "latitude": "45.73",
+    "longitude": "4.83",
+    "nbCar": "3",
+    "maxCar": "10"
+    },{
+    "id": "2",
+    "latitude": "45.736",
+    "longitude": "4.837",
+    "nbCar": "1",
+    "maxCar": "10"
+    },{
+    "id": "3",
+    "latitude": "45.726",
+    "longitude": "4.83",
+    "nbCar": "2",
+    "maxCar": "5"
+  },{
+    "id": "4",
+    "latitude": "45.74",
+    "longitude": "4.84",
+    "nbCar": "5",
+    "maxCar": "10"
+  },{
+    "id": "5",
+    "latitude": "45.737",
+    "longitude": "4.838",
+    "nbCar": "8",
+    "maxCar": "10"
+  },{
+    "id": "6",
+    "latitude": "45.738",
+    "longitude": "4.839",
+    "nbCar": "10",
+    "maxCar": "10"
+  }
+
+]}
