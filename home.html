@@ -9,10 +9,10 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Borne</title>
+    <title> Liste des Stations</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="bootstrap-3.3.7/docs/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap-3.3.7/docs/dist/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="bootstrap-3.3.7/docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
@@ -28,43 +28,42 @@
 
 <body>
 
-<div class="site-wrapper">
-
-    <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-            <div class="masthead clearfix">
-                <div class="inner">
-                    <h3 class="masthead-brand">Liste des bornes</h3>
-
-                </div>
+        <div class="container">
+            <div class="container">
+                    <h3 class="masthead-brand">Liste des Stations</h3>
             </div>
 
-            <div class="inner cover">
+                <div class="container well">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Stations</th>
+                                        <th>Disponibilité</th>
+                                    </tr>
 
-                <div>
-                    <p hidden>hello</p>
-                    <i id ="0" class="station">Station</i>
-                    <p id="clonedzone"></p>
+                                </thead>
+                                <tbody>
+                                    <tr id ="0" class="station"></tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+
                 </div>
-
-
 
 
         </div>
 
-    </div>
 
-</div>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="jquery-3.1.1.min.js"></script>
+<script src="bootstrap.js"></script>
+<script src="cookie.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 
 
 
@@ -76,35 +75,38 @@
         //récupération des données
         $.ajax({
             type: 'GET',
-            url: "http://192.168.1.16:8080/greeting",
+            url: "http://demo5844914.mockable.io/greeting", //"http://192.168.1.16:8080/greeting",
             dataType: 'json',
             success: function (msg) { // success est toujours en place, bien sûr !
                 console.log(msg);
                 //alert(msg["id"]);
-                var id = msg['id'];
+                data = msg["stations"];
+                console.log(data);
 
+                    $.each(data, function(i, item) {
+                        /**ajout des stations**/
 
-                //ajout des bornes
+                        var cloned = $("#0").clone(true,true);
 
+                        cloned.attr('id',item.id);
+                        cloned.html('<td><a href=\"./station.html\">Station ' + item.id+'<a></td><td>'+item.nbCar+'/'+item.nbMaxCar+'</td>');
+                        //cloned.attr('style','display: block')
+                        //
+                        cloned.insertAfter($(".station").last());
+                    });
 
-                var station = $("#0");
-                var cloned = $("#0").clone();
-                var clonedzone = $("#clonedzone");
-                cloned.appendTo(clonedzone);
-
-                //foreach (".station")
-
-                    {
-                        $(".station").html('Station ' + id);
-                        //$(".station")
-                    }
-                station.hide();
             },
             error: function (msg) {alert("error");}
         });
 
+        $(".station").on('click', function () {
+            var idCookie = $(this).attr('id');
+            setCookie('station', idCookie, 7);
+        });
 
     });
+
+
 
 
 </script>

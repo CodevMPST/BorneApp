@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title class="pageTitle"></title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap-3.3.7/docs/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="bootstrap-3.3.7/docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="bootstrap-3.3.7/docs/examples/cover/cover.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="masthead clearfix">
+                <div class="inner">
+                    <h3 class="masthead-brand">Station n° <span class="idStation"></span></h3>
+                    <nav>
+                        <ul class="nav masthead-nav">
+                            <li class="active"><a id="reservation" href="#">Réservation</a></li>
+                            <li><a id="restitution" href="#">Restitution</a></li>
+                            <li><a href="./home.html">Retour Menu</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="inner cover">
+
+                <div>
+                    <i id="car" class="fa fa-car fa-1"> </i>
+                    <div id="attributes" hidden>
+                        <div class="idVehicule"></div>
+                        <div class="rfid"></div>
+                        <div class="etatBatterie"></div>
+                        <div class="categorie"></div>
+                        <div class="type"></div>
+                    </div>
+                </div>
+                    <p id="clonedzone"></p>
+
+
+            <h2 id="mainText">Choisissez votre voiture :)</h2></br>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Modal 1-->
+<div id="modal1" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 id="modal1Titre" class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <p id="modal1IdBorne" hidden></p>
+                <p class="typeModal"></p>
+                <p class="categorieModal"></p>
+                <p class="etatBatterieModal"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="Reserver" class="btn btn-primary">Réserver cette voiture</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="modal2" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Restitution</h4>
+            </div>
+            <div class="modal-body">
+                <p id="modal2IdBorne" hidden></p>
+                <button type="button" id="Restituer" class="btn btn-primary">Restituer la voiture</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="modal3" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <span class="fa fa-check"></span>
+                <p>Opération Réussie !</p>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="jquery-3.1.1.min.js"></script>
+<script src="bootstrap.js"></script>
+<script src="cookie.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+</body>
+</html>
+
+<script>
+    $(document).ready(function(){ /*code here*/
+
+        console.log(document.cookie);
+        var idStation = getCookie('station');
+        $('.pageTitle').html('Station n° '+idStation)
+        $(".idStation").html(idStation);
+        var tab = new Array();
+        var i =0;
+
+        //récupération des données
+        $.ajax({
+            type: 'GET',
+           // data : "id="+idStation,
+            url: "http://demo5844914.mockable.io/test", //"http://192.168.1.16:8080/greeting",
+            dataType: 'json',
+            success: function (msg) {
+                console.log(msg);
+                //alert(msg["id"]);
+                var id = msg['id'];
+
+                data = msg["bornes"];
+                console.log(data);
+                if(id == idStation)
+                {
+                    $.each(data, function(i, item) {
+
+                        var car = $("#car");
+                        var cloned = car.clone(true,true);
+                        cloned.attr('id',item.idBorne);
+                        cloned.attr('style','display: inline-block')
+                        var clonedzone = $("#clonedzone");
+                        cloned.appendTo(clonedzone);
+
+                        if(item.etatBorne == false)
+                        {
+                            cloned.addClass('busyStation');
+                            cloned.addClass('valid');
+
+                            var attributes = $("#attributes");
+                            var cloned = attributes.clone(true,true);
+                            cloned.attr('id',"attributes"+i);
+                            cloned.addClass('attributes');
+                            cloned.attr('style','display: inline-block')
+                            cloned.children('.idVehicule').html(item.vehicule.idVehicule);
+                            cloned.children('.rfid').html(item.vehicule.rfid);
+                            cloned.children('.etatBatterie').html(item.vehicule.etatBatterie);
+                            cloned.children('.categorie').html(item.vehicule.typeVehicule.categorie);
+                            cloned.children('.type').html(item.vehicule.typeVehicule.type);
+                            cloned.appendTo(clonedzone)
+                            cloned.hide();
+
+                        }
+
+
+                    })
+                }
+
+                $("#reservation").trigger("click");
+
+                $(".fa-car").on('click', function () {
+                    if(!$(this).hasClass('untouchable')) {
+                        if($(this).hasClass('busyStation')) {
+                            var idBorne = $(this).attr("id");
+                            var rfid = $(this).next('.attributes').children('.rfid').html();
+                            var etatBatterie = $(this).next('.attributes').children('.etatBatterie').html();
+                            var modele = $(this).next('.attributes').children('.type').html();
+                            var categorie = $(this).next('.attributes').children('.categorie').html();
+                            $("#modal1Titre").html("Voiture n° " + rfid);
+                            $(".etatBatterieModal").html("Batterie chargée à " + etatBatterie + "%");
+                            $(".typeModal").html("Modèle : " + modele);
+                            $(".categorieModal").html("Catégorie : " + categorie);
+                            $("#modal1IdBorne").html(idBorne);
+                            $("#modal1").modal("show");
+                        }
+                        else{
+                            var idBorne = $(this).attr("id");
+                            $("#modal2IdBorne").html(idBorne);
+                            $("#modal2").modal("show");
+                        }
+                    }
+                });
+
+            },
+            error: function (msg) {alert("error");}
+        });
+
+        $("#Reserver").on('click', function () {
+            var idBorneReserv = $("#modal1IdBorne").html();
+            $.ajax({
+                type: 'POST',
+                url: "http://demo5844914.mockable.io/reserver", //"http://192.168.1.16:8080/reserver",
+                data: 'idClient=' + 1 + 'idBorne=' + idBorneReserv,
+                dataType: 'json',
+                success: function (msg) {
+                    console.log(msg);
+                    $("#modal1").modal('toggle');
+                    $("#modal3").modal('toggle');
+                },
+                error: function (msg) {
+                    alert("error");
+                }
+            });
+        });
+
+        $("#Restituer").on('click', function () {
+            var idBorneRestit = $("#modal2IdBorne").html();
+            $.ajax({
+                type: 'POST',
+                url: "http://demo5844914.mockable.io/restituer", //"http://192.168.1.16:8080/reserver",
+                data: 'idClient=' + 1 + 'idBorne=' + idBorneRestit,
+                dataType: 'json',
+                success: function (msg) {
+                    console.log(msg);
+                    $("#modal2").modal('toggle');
+                    $("#modal3").modal('toggle');
+                },
+                error: function (msg) {
+                    alert("error");
+                }
+            });
+        });
+
+        $("#restitution").on('click', function () {
+            $(this).parent('li').attr('class','active')
+            $('#reservation').parent('li').attr('class','');
+            $("#mainText").html("Sélectionnez une borne vide :)")
+
+
+                $('.fa-car').removeClass("untouchable");
+                $('.busyStation').addClass("untouchable");
+
+        });
+        $("#reservation").on('click', function () {
+            $(this).parent('li').attr('class','active')
+            $('#restitution').parent('li').attr('class','');
+            $("#mainText").html("Choisissez votre voiture :)");
+
+            $('.fa-car').addClass("untouchable");
+            $('.busyStation').removeClass("untouchable");
+        });
+
+
+            $("#car").hide();
+    })
+</script>

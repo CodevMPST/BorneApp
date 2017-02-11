@@ -1,6 +1,37 @@
-#car{
-    font-size : 100%;
-    color : #00b3ee;
-    width : 50px;
-    font-size: x-large;
+.fa-car{
+    font-size : 500%;
+    color : #CC0000;
+    width : 100px;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.fa-check{
+    font-size : 500%;
+    color : green;
+}
+
+.busyStation{
+    color : #00CC00;
+}
+
+.untouchable{
+    opacity: 0.3;
+    cursor : default;
+}
+
+.modal{
+    color : #0f0f0f;
+    text-shadow: none;
+}
+
+td, td a {
+    color : #0f0f0f;
+    text-shadow: none;
+}
+
+th{
+    text-align: center;
+    color : #0f0f0f;
+    text-shadow: none;
 }
