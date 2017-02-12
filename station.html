@@ -124,6 +124,36 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div id="modal4" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Erreur</h4>
+            </div>
+            <div class="modal-body">
+                <span class="fa fa-times"></span>
+                <p>Vous ne possédez plus de voiture à rendre !</p>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="modal5" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Erreur</h4>
+            </div>
+            <div class="modal-body">
+                <span class="fa fa-times"></span>
+                <p>Vous ne pouvez louer qu'une voiture à la fois !</p>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -147,8 +177,8 @@
         //récupération des données
         $.ajax({
             type: 'GET',
-           // data : "id="+idStation,
-            url: "http://demo5844914.mockable.io/test", //"http://192.168.1.16:8080/greeting",
+            data : "id="+idStation,
+            url: "http://192.168.1.39:8080/station", //"http://192.168.1.16:8080/greeting",
             dataType: 'json',
             success: function (msg) {
                 console.log(msg);
@@ -225,16 +255,26 @@
             var idBorneReserv = $("#modal1IdBorne").html();
             $.ajax({
                 type: 'POST',
-                url: "http://demo5844914.mockable.io/reserver", //"http://192.168.1.16:8080/reserver",
-                data: 'idClient=' + 1 + 'idBorne=' + idBorneReserv,
-                dataType: 'json',
+                url: "http://192.168.1.39:8080/reserver",
+                data: { idClient: 1, idBorne: idBorneReserv },
+                //'idClient=' + 1 + '&idBorne=' + idBorneReserv,
                 success: function (msg) {
+
                     console.log(msg);
                     $("#modal1").modal('toggle');
-                    $("#modal3").modal('toggle');
+                    if(msg=="Erreur : Le client a déjà reservé une voiture")
+                    {
+                        $("#modal5").modal('toggle');
+                    }
+                    else{
+                        $("#modal3").modal('toggle');
+                        $('#'+idBorneReserv).removeClass('busyStation').addClass('untouchable');
+                    }
+
                 },
                 error: function (msg) {
-                    alert("error");
+                    console.log(msg);
+                    alert(msg);
                 }
             });
         });
@@ -243,13 +283,22 @@
             var idBorneRestit = $("#modal2IdBorne").html();
             $.ajax({
                 type: 'POST',
-                url: "http://demo5844914.mockable.io/restituer", //"http://192.168.1.16:8080/reserver",
-                data: 'idClient=' + 1 + 'idBorne=' + idBorneRestit,
-                dataType: 'json',
+                url: "http://192.168.1.39:8080/restituer", //"http://192.168.1.16:8080/reserver",
+                data: { idClient: 1, idBorne: idBorneRestit },
+                //'idClient:' + 1 + '&idBorne=' + idBorneRestit,
                 success: function (msg) {
                     console.log(msg);
                     $("#modal2").modal('toggle');
-                    $("#modal3").modal('toggle');
+                    if(msg=="Erreur : Aucune réservation associée à ce client")
+                    {
+                        $("#modal4").modal('toggle');
+                    }
+                    else{
+                        $("#modal3").modal('toggle');
+                        $('#'+idBorneRestit).addClass('untouchable').addClass('busyStation');
+                    }
+
+
                 },
                 error: function (msg) {
                     alert("error");

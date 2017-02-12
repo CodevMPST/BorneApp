@@ -6,6 +6,11 @@
     cursor: hand;
 }
 
+.fa-times{
+    font-size : 500%;
+    color : darkred;
+}
+
 .fa-check{
     font-size : 500%;
     color : green;
